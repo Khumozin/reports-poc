@@ -1,0 +1,52 @@
+<span class="text-2xl text-slate-700">Reports POC</span>
+
+<form [formGroup]="form"
+      class="w-64 flex flex-col mb-8 mt-4">
+    <mat-form-field class="w-64">
+        <mat-label>Dealer</mat-label>
+        <mat-select formControlName="dealer">
+            @for (dealer of dealers$ | async; track $index) {
+            <mat-option [value]="dealer">{{ dealer }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-64">
+        <mat-label>Month and Year</mat-label>
+        <input matInput
+               [matDatepicker]="dp"
+               formControlName="date">
+        <mat-datepicker-toggle matIconSuffix
+                               [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp
+                        startView="multi-year"
+                        (monthSelected)="setMonthAndYear($event, dp)"
+                        panelClass="example-month-picker">
+        </mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button
+            color="primary"
+            class="w-64"
+            (click)="onGetData()">
+        Load Data
+    </button>
+</form>
+
+<ngx-charts-line-chart [view]="view"
+                       [scheme]="colorScheme"
+                       [legend]="legend"
+                       [legendPosition]="legendPosition"
+                       [showXAxisLabel]="showXAxisLabel"
+                       [showYAxisLabel]="showYAxisLabel"
+                       [xAxis]="xAxis"
+                       [yAxis]="yAxis"
+                       [xAxisLabel]="xAxisLabel"
+                       [yAxisLabel]="yAxisLabel"
+                       [timeline]="timeline"
+                       [results]="multi"
+                       [legendTitle]="'Targeted Actuals by Day for a Dealer - Year To Date'"
+                       (select)="onSelect($event)"
+                       (activate)="onActivate($event)"
+                       (deactivate)="onDeactivate($event)">
+</ngx-charts-line-chart>
